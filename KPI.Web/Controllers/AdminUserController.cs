@@ -58,6 +58,9 @@ namespace KPI.Web.Controllers
         {
             return Json(new KPILevelDAO().GetAll(), JsonRequestBehavior.AllowGet);
         }
-
+        public JsonResult GetListAllRole()
+        {
+            return Json(new UserAdminDAO().GetListAllRole(), JsonRequestBehavior.AllowGet);
+        }
     }
 }

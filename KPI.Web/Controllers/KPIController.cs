@@ -24,9 +24,9 @@ namespace KPI.Web.Controllers
             return Json(new KPILevelDAO().ListDatas(kpilevelcode, period), JsonRequestBehavior.AllowGet);
         }
       
-        public JsonResult GetListTree()
+        public JsonResult GetListTree(int id)
         {
-            return Json(new LevelDAO().GetListTree(), JsonRequestBehavior.AllowGet);
+            return Json(new LevelDAO().GetListTree(id), JsonRequestBehavior.AllowGet);
         }
         public JsonResult LoadData()
         {

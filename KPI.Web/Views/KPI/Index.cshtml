@@ -44,7 +44,9 @@
                     }
                 },
                 glyph: glyph_opts,
-                source: { url: "/KPI/GetListTree", debugDelay: 1000 },
+                source: {
+                    url: "/KPI/GetListTree/" + $('#user').data('userid'), debugDelay: 100
+                },
                 table: {
                     indentation: 20,
                     nodeColumnIdx: 1,
@@ -62,12 +64,11 @@
                     kpiController.loadDataCategory();
                     kpiController.loadDataKPILevel(true, data.node.key)
 
-
                     // return false to prevent default behavior (i.e. activation, ...)
                     //return false;
                 },
                 lazyLoad: function (event, data) {
-                    data.result = { url: "/GetListTree", debugDelay: 1000 };
+                    data.result = { url: "/GetListTree/"+$('#user').data('userid'), debugDelay: 100 };
                 },
                 renderColumns: function (event, data) {
                     var node = data.node,
@@ -546,23 +547,19 @@
                                     KPIName: item.KPIName,
                                     KPILevelCode: item.KPILevelCode,
 
-                                    //neu
-                                    WeeklyCheckedAttr: item.WeeklyChecked === true ? (item.StatusUploadDataW === true ? "" : "") : "disabled",
-                                    MonthlyCheckedAttr: item.MonthlyChecked === true ? (item.StatusUploadDataM === true ? "" : "") : "disabled",
-                                    QuarterlyCheckedAttr: item.QuaterlyChecked === true ? (item.StatusUploadDataQ === true ? "" : "") : "disabled",
-                                    YearlyCheckedAttr: item.YearlyChecked === true ? (item.StatusUploadDataY === true ? "" : "") : "disabled",
+                                    //neu co check week thi kiem tra tiep neu co du lieu thi khong disabled
+                                    WeeklyCheckedAttr: item.WeeklyChecked === true ? (item.StatusUploadDataW === true ? "" : (item.StatusEmptyDataW === true ? "" : "")) : "disabled",
+                                    MonthlyCheckedAttr: item.MonthlyChecked === true ? (item.StatusUploadDataM === true ? "" : (item.StatusEmptyDataM === true ? "" : "")) : "disabled",
+                                    QuarterlyCheckedAttr: item.QuaterlyChecked === true ? (item.StatusUploadDataQ === true ? "" : (item.StatusEmptyDataQ === true ? "" : "")) : "disabled",
+                                    YearlyCheckedAttr: item.YearlyChecked === true ? (item.StatusUploadDataY === true ? "" : (item.StatusEmptyDataY === true ? "" : "")) : "disabled",
 
                                     //Neu duoc check va upload dung thoi han thi xanh
 
-                                    WeeklyChecked: item.WeeklyChecked === true && item.StatusUploadDataW === false ? "btn-success" : item.WeeklyChecked === true && item.StatusUploadDataW === true ? "btn-warning" : "bg-navy",
-                                    MonthlyChecked: item.MonthlyChecked === true && item.StatusUploadDataM === false ? "btn-success" : item.MonthlyChecked === true && item.StatusUploadDataM === true ? "btn-warning" : "bg-navy",
-                                    QuaterlyChecked: item.QuaterlyChecked === true && item.StatusUploadDataQ === false ? "btn-success" : item.QuaterlyChecked === true && item.StatusUploadDataQ === true ? "btn-warning" : "bg-navy",
-                                    YearlyChecked: item.YearlyChecked === true && item.StatusUploadDataY === false ? "btn-success" : item.YearlyChecked === true && item.StatusUploadDataY === true ? "btn-warning" : "bg-navy",
+                                    WeeklyChecked: item.WeeklyChecked === true ? (item.StatusUploadDataW === true ? "btn-success" : (item.StatusEmptyDataW === true ? "btn-warning" : "btn-success")) : "bg-navy",
+                                    MonthlyChecked: item.MonthlyChecked === true ? (item.StatusUploadDataM === true ? "btn-success" : (item.StatusEmptyDataM === true ? "btn-warning" : "btn-success")) : "bg-navy",
+                                    QuaterlyChecked: item.QuaterlyChecked === true ? (item.StatusUploadDataQ === true ? "btn-success" : (item.StatusEmptyDataQ === true ? "btn-warning" : "btn-success")) : "bg-navy",
+                                    YearlyChecked: item.YearlyChecked === true ? (item.StatusUploadDataY === true ? "btn-success" : (item.StatusEmptyDataY === true ? "btn-warning" : "btn-success")) : "bg-navy",
 
-                                    //WeeklyChecked: item.WeeklyChecked === true ? (item.StatusUploadDataW === true ? "btn-success" : "btn-warning") : "bg-navy",
-                                    //MonthlyChecked: item.MonthlyChecked === true ? (item.StatusUploadDataM === true ? "btn-success" : "btn-warning") : "bg-navy",
-                                    //QuaterlyChecked: item.QuaterlyChecked === true ? (item.StatusUploadDataQ === true ? "btn-success" : "btn-warning") : "bg-navy",
-                                    //YearlyChecked: item.YearlyChecked === true ? (item.StatusUploadDataY === true ? "btn-success" : "btn-warning") : "bg-navy",
 
 
                                 });

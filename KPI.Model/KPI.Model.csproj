@@ -75,6 +75,8 @@
     <Compile Include="DAO\KPIAdminDAO.cs" />
     <Compile Include="DAO\KPILevelDAO.cs" />
     <Compile Include="DAO\UserLoginDAO.cs" />
+    <Compile Include="EF\Credential.cs" />
+    <Compile Include="EF\Role.cs" />
     <Compile Include="EF\Category.cs" />
     <Compile Include="EF\Comment.cs" />
     <Compile Include="EF\Favourite.cs" />
@@ -94,6 +96,14 @@
     <Compile Include="Migrations\201908021439441_version.cs" />
     <Compile Include="Migrations\201908021439441_version.Designer.cs">
       <DependentUpon>201908021439441_version.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201908080425517_addRoleandCredential.cs" />
+    <Compile Include="Migrations\201908080425517_addRoleandCredential.Designer.cs">
+      <DependentUpon>201908080425517_addRoleandCredential.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201908080435334_addRoleandCredential1.cs" />
+    <Compile Include="Migrations\201908080435334_addRoleandCredential1.Designer.cs">
+      <DependentUpon>201908080435334_addRoleandCredential1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -119,6 +129,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201908021439441_version.resx">
       <DependentUpon>201908021439441_version.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908080425517_addRoleandCredential.resx">
+      <DependentUpon>201908080425517_addRoleandCredential.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908080435334_addRoleandCredential1.resx">
+      <DependentUpon>201908080435334_addRoleandCredential1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

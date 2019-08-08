@@ -221,10 +221,22 @@ namespace KPI.Model.DAO
             var currentdate = DateTime.Now.Date;
             var dt = new DateTime(2019, 8, 1);
             var value = DateTime.Compare(currentdate, dt);
-            bool StatusUploadDataW = _dbContext.Datas.Where(a =>
-                                a.KPILevelCode == "1G010001PO" &&
-                                a.KPIKind == "M")
-                                .Max(x => x.Month) <= monthofyear ? (DateTime.Compare(currentdate, dt) < 0 ? true : false) : false;
+            //bool StatusUploadDatM= _dbContext.Datas.Where(a =>
+            //                    a.KPILevelCode == "1G010001PO" &&
+            //                    a.KPIKind == "M")
+            //                    .Max(x => x.Month) <= monthofyear ? (DateTime.Compare(currentdate, dt) < 0 ? true : false) : false;
+            //bool StatusUploadDataW = _dbContext.Datas.Where(a =>
+            //                  a.KPILevelCode == "1G010001PO" &&
+            //                  a.KPIKind == "W")
+            //                  .Max(x => x.Week) <= weekofyear ? (2 < currentweekday ? true : false) : false;
+            //bool StatusUploadDataW = weekofyear - _dbContext.Datas.Where(a =>
+            //                     a.KPILevelCode == "2G010002PO" &&
+            //                     a.KPIKind == "W")
+            //                    .Max(x => x.Week) > 1 ? false :
+            //                    (weekofyear - _dbContext.Datas.Where(a =>
+            //                    a.KPILevelCode == "2G010002PO" &&
+            //                    a.KPIKind == "W")
+            //                    .Max(x => x.Week) == 1) ? 2 < currentweekday : true;
             try
             {
                 var model = from kpiLevel in _dbContext.KPILevels
@@ -266,27 +278,41 @@ namespace KPI.Model.DAO
                                 CategoryID = kpi.CategoryID,
                                 KPIName = kpi.Name,
                                 LevelCode = level.Code,
-                                StatusUploadDataW = _dbContext.Datas.Where(a =>
+                                //neu < 1 thi dung, 
+                                StatusUploadDataW = weekofyear - _dbContext.Datas.Where(a =>
+                                 a.KPILevelCode == kpiLevel.KPILevelCode &&
+                                 a.KPIKind == (kpiLevel.WeeklyChecked == true ? "W" : ""))
+                                .Max(x => x.Week) > 1 ? false :
+                                ((weekofyear - _dbContext.Datas.Where(a =>
                                 a.KPILevelCode == kpiLevel.KPILevelCode &&
                                 a.KPIKind == (kpiLevel.WeeklyChecked == true ? "W" : ""))
-                                .Max(x => x.Week) < weekofyear ? (kpiLevel.Weekly < currentweekday ? true : false) : false,
+                                .Max(x => x.Week)) == 1 ? (kpiLevel.Weekly < currentweekday ? true : false) : false),
 
-                                StatusUploadDataM = _dbContext.Datas.Where(a =>
+                                StatusUploadDataM = monthofyear - _dbContext.Datas.Where(a =>
                                 a.KPILevelCode == kpiLevel.KPILevelCode &&
                                 a.KPIKind == (kpiLevel.MonthlyChecked == true ? "M" : ""))
-                                .Max(x => x.Month) < monthofyear ? (DateTime.Compare(currentdate, kpiLevel.Monthly.Value) < 0 ? true : false) : false,
+                                .Max(x => x.Month) > 1 ? false : monthofyear - _dbContext.Datas.Where(a =>
+                                  a.KPILevelCode == kpiLevel.KPILevelCode &&
+                                  a.KPIKind == (kpiLevel.MonthlyChecked == true ? "M" : ""))
+                                .Max(x => x.Month) == 1 ? (DateTime.Compare(currentdate, kpiLevel.Monthly.Value) < 0 ? true : false) : false,
 
                                 StatusUploadDataQ =
-                                _dbContext.Datas.Where(a =>
-                                a.KPILevelCode == kpiLevel.KPILevelCode &&
-                                a.KPIKind == (kpiLevel.QuaterlyChecked == true ? "Q" : ""))
-                                .Max(x => x.Quater) < quarterofyear ? (DateTime.Compare(currentdate, kpiLevel.Quaterly.Value) < 0 ? true : false) : false, //true dung han flase tre han
+                                quarterofyear - _dbContext.Datas.Where(a =>
+                                  a.KPILevelCode == kpiLevel.KPILevelCode &&
+                                  a.KPIKind == (kpiLevel.QuaterlyChecked == true ? "Q" : ""))
+                                .Max(x => x.Quater) > 1 ? false : quarterofyear - _dbContext.Datas.Where(a =>
+                                   a.KPILevelCode == kpiLevel.KPILevelCode &&
+                                   a.KPIKind == (kpiLevel.QuaterlyChecked == true ? "Q" : ""))
+                                .Max(x => x.Quater) == 1 ? (DateTime.Compare(currentdate, kpiLevel.Quaterly.Value) < 0 ? true : false) : false, //true dung han flase tre han
 
                                 StatusUploadDataY =
-                                _dbContext.Datas.Where(a =>
-                                a.KPILevelCode == kpiLevel.KPILevelCode &&
-                                a.KPIKind == (kpiLevel.YearlyChecked == true ? "Y" : ""))
-                                .Max(x => x.Year) < year ? (DateTime.Compare(currentdate, kpiLevel.Yearly.Value) < 0 ? true : false) : false,
+                                year - _dbContext.Datas.Where(a =>
+                                  a.KPILevelCode == kpiLevel.KPILevelCode &&
+                                  a.KPIKind == (kpiLevel.YearlyChecked == true ? "Y" : ""))
+                                .Max(x => x.Year) > 1 ? false : year - _dbContext.Datas.Where(a =>
+                                      a.KPILevelCode == kpiLevel.KPILevelCode &&
+                                      a.KPIKind == (kpiLevel.YearlyChecked == true ? "Y" : ""))
+                                .Max(x => x.Year) == 1 ? (DateTime.Compare(currentdate, kpiLevel.Yearly.Value) < 0 ? true : false) : false,
 
                             };
 

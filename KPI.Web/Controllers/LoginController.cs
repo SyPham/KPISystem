@@ -19,6 +19,7 @@ namespace KPI.Web.Controllers
         // GET: Login
         public ActionResult Index()
         {
+          //var model =  new LevelDAO().GetListTree2(4);
             return View();
         }
 

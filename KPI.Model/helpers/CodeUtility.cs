@@ -395,22 +395,20 @@ namespace KPI.Model.helpers
             return string.IsNullOrEmpty(value.ToString());
         }
 
-        public static string SHA256Hash(this string rawData)
+        public static string SHA256Hash(this string value)
         {
-            // Create a SHA256
-            using (SHA256 sha256Hash = SHA256.Create())
-            {
-                // ComputeHash - returns byte array
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+            StringBuilder Sb = new StringBuilder();
 
-                // Convert byte array to a string
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-                return builder.ToString();
+            using (SHA256 hash = SHA256Managed.Create())
+            {
+                Encoding enc = Encoding.UTF8;
+                Byte[] result = hash.ComputeHash(enc.GetBytes(value.ToSafetyString()));
+
+                foreach (Byte b in result)
+                    Sb.Append(b.ToString("x2"));
             }
+
+            return Sb.ToSafetyString();
         }
 
         public static string ReplaceSpecial(this string value)

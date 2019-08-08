@@ -188,5 +188,26 @@ namespace KPI.Model.DAO
                 return false;
             }
         }
+
+        public object UploadData()
+        {
+            var model = (from a in _dbContext.KPILevels
+                        join h in _dbContext.KPIs on a.KPIID equals h.ID
+                        join c in _dbContext.Levels on a.LevelID equals c.ID
+                        where a.KPILevelCode!=null && a.KPILevelCode!=string.Empty
+                        select new
+                        {
+                            KPILevelCode=a.KPILevelCode,
+                            KPIName = h.Name,
+                            LevelName = c.Name,
+                            StatusW = _dbContext.KPILevels.FirstOrDefault(x=>x.KPILevelCode== a.KPILevelCode).Weekly!=null?true:false,
+                            StatusM = _dbContext.KPILevels.FirstOrDefault(x => x.KPILevelCode == a.KPILevelCode).Monthly != null ? true : false,
+                            StatusQ = _dbContext.KPILevels.FirstOrDefault(x => x.KPILevelCode == a.KPILevelCode).Quaterly != null ? true : false,
+                            StatusY = _dbContext.KPILevels.FirstOrDefault(x => x.KPILevelCode == a.KPILevelCode).Yearly != null ? true : false,
+                        }).AsEnumerable();
+            model = model.ToList();
+
+            return model;
+        }
     }
 }

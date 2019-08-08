@@ -12,7 +12,9 @@ var kpiLevelConfig = {
 var adminUserController = {
     init: function () {
         adminUserController.loadData();
+        adminUserController.loadDataRole();
         adminUserController.registerEvent();
+
     },
     registerEvent: function () {
         $('#search').off('keypress').on('keypress', function (e) {
@@ -46,8 +48,7 @@ var adminUserController = {
         });
         //delete
         $('.btnDelete').off('click').on('click', function () {
-            adminUserController.deleteData(Number($(this).data('id')));
-            adminUserController.loadData();
+            adminUserController.deleteData($(this).data('id'));
         });
         //delete
         $('.IsActive').off('click').on('click', function () {
@@ -241,7 +242,7 @@ var adminUserController = {
                 $('#updateKpi .Username').val(result.Username);
                 $('#updateKpi .Code').val(result.Code);
                 $('#updateKpi .LevelID').val(result.LevelID);
-                $('#updateKpi .Role').val(result.Code);
+                $('#updateKpi .Role').val(result.ID);
                 $('#updateKpi .FullName').val(result.LevelID);
                 $('#modal-group2').modal('show');
 
@@ -251,17 +252,18 @@ var adminUserController = {
             }
         });
     },
-    loadDataCategory: function () {
+    loadDataRole: function () {
         $.ajax({
-            url: '/AdminKPI/GetCategoryCode',
+            url: '/AdminUser/GetListAllRole',
             type: "GET",
             dataType: "json",
             success: function (data) {
-                $("#box select").empty();
-                $("#box select").append('<option value="">.: Choose Category :.</option>');
+                $("#modal-group2 select, #modal-group select").empty();
+                $("#modal-group2 select,#modal-group select").append('<option value="">.: Choose Category :.</option>');
+
                 //console.log(data);
                 $.each(data, function (key, item) {
-                    $("#box select").append("<option value=\"" + item.Code + "\">" + item.Name + "</option>");
+                    $(".Role").append("<option value=\"" + item.ID + "\">" + item.Name + "</option>");
                 });
             }
         });
