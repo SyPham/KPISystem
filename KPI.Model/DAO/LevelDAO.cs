@@ -199,365 +199,58 @@ namespace KPI.Model.DAO
             return levelVMs;
         }
 
-        public object GetListTree(int userid)
+        public object GetListTreeClient(int userid)
         {
             var levels = new List<ViewModel.KPITreeViewModel>();
             List<ViewModel.KPITreeViewModel> hierarchy = new List<ViewModel.KPITreeViewModel>();
 
             var listLevels = _dbContext.Levels.OrderBy(x => x.LevelNumber).ToList();
 
-            var user = _dbContext.Users.FirstOrDefault(x=>x.ID==userid);
-
-            var credential = _dbContext.Credentials.FirstOrDefault(x => x.ID == userid);
-
-          
-            var levelNumber = _dbContext.Levels.FirstOrDefault(x => x.ID == user.TeamID);
+            var user = _dbContext.Users.FirstOrDefault(x => x.ID == userid);
+            var levelNumber = _dbContext.Levels.FirstOrDefault(x => x.ID == user.LevelID);
 
             if (levelNumber == null)
             {
                 return new List<KPITreeViewModel>();
             }
-                var permision = _dbContext.Roles.FirstOrDefault(x => x.ID == credential.RoleID);
 
-            if (permision.Code == "GRO")
+            listLevels = listLevels.Where(x => x.LevelNumber >= levelNumber.LevelNumber).OrderBy(x => x.LevelNumber).ToList();
+            foreach (var item in listLevels)
             {
-                listLevels = listLevels.Where(x => x.LevelNumber >= levelNumber.LevelNumber).OrderBy(x => x.LevelNumber).ToList();
-                foreach (var item in listLevels)
-                {
-                    var levelItem = new ViewModel.KPITreeViewModel();
-                    levelItem.key = item.ID;
-                    levelItem.title = item.Name;
-                    levelItem.code = item.Code;
-                    levelItem.state = item.State;
-                    levelItem.levelnumber = item.LevelNumber;
-                    levelItem.parentid = item.ParentID;
-                    levels.Add(levelItem);
-                }
-                var itemLevel = _dbContext.Levels.FirstOrDefault(x => x.ID == user.TeamID);
-                hierarchy = levels.Where(c => c.parentid == itemLevel.ParentID)
-                           .Select(c => new ViewModel.KPITreeViewModel()
-                           {
-                               key = c.key,
-                               title = c.title,
-                               code = c.code,
-                               levelnumber = c.levelnumber,
-                               parentid = c.parentid,
-                               children = GetChildren(levels, c.key)
-                           })
-                           .ToList();
-
-                HieararchyWalk(hierarchy);
-                var obj = new KPITreeViewModel();
-                foreach (var item in hierarchy)
-                {
-                    if (item.key == itemLevel.ID)
-                    {
-                        obj = item;
-                        break;
-                    }
-                }
-                var model = hierarchy.Where(x => x.key == itemLevel.ID).ToList();
-                return model;
+                var levelItem = new ViewModel.KPITreeViewModel();
+                levelItem.key = item.ID;
+                levelItem.title = item.Name;
+                levelItem.code = item.Code;
+                levelItem.state = item.State;
+                levelItem.levelnumber = item.LevelNumber;
+                levelItem.parentid = item.ParentID;
+                levels.Add(levelItem);
             }
-            else if (permision.Code == "DIV")
+            var itemLevel = _dbContext.Levels.FirstOrDefault(x => x.ID == user.LevelID);
+            hierarchy = levels.Where(c => c.parentid == itemLevel.ParentID)
+                       .Select(c => new ViewModel.KPITreeViewModel()
+                       {
+                           key = c.key,
+                           title = c.title,
+                           code = c.code,
+                           levelnumber = c.levelnumber,
+                           parentid = c.parentid,
+                           children = GetChildren(levels, c.key)
+                       })
+                       .ToList();
+
+            HieararchyWalk(hierarchy);
+            var obj = new KPITreeViewModel();
+            foreach (var item in hierarchy)
             {
-                listLevels = listLevels.Where(x => x.LevelNumber >= levelNumber.LevelNumber).OrderBy(x => x.LevelNumber).ToList();
-                foreach (var item in listLevels)
+                if (item.key == itemLevel.ID)
                 {
-                    var levelItem = new ViewModel.KPITreeViewModel();
-                    levelItem.key = item.ID;
-                    levelItem.title = item.Name;
-                    levelItem.code = item.Code;
-                    levelItem.state = item.State;
-                    levelItem.levelnumber = item.LevelNumber;
-                    levelItem.parentid = item.ParentID;
-                    levels.Add(levelItem);
+                    obj = item;
+                    break;
                 }
-                var itemLevel = _dbContext.Levels.FirstOrDefault(x => x.ID == user.TeamID);
-                hierarchy = levels.Where(c => c.parentid == itemLevel.ParentID)
-                           .Select(c => new ViewModel.KPITreeViewModel()
-                           {
-                               key = c.key,
-                               title = c.title,
-                               code = c.code,
-                               levelnumber = c.levelnumber,
-                               parentid = c.parentid,
-                               children = GetChildren(levels, c.key)
-                           })
-                           .ToList();
-
-                HieararchyWalk(hierarchy);
-                var obj = new KPITreeViewModel();
-                foreach (var item in hierarchy)
-                {
-                    if (item.key == itemLevel.ID)
-                    {
-                        obj = item;
-                        break;
-                    }
-                }
-                var model = hierarchy.Where(x => x.key == itemLevel.ID).ToList();
-                return model;
             }
-            else if (permision.Code == "FAC")
-            {
-                listLevels = listLevels.Where(x => x.LevelNumber >= levelNumber.LevelNumber).OrderBy(x => x.LevelNumber).ToList();
-                foreach (var item in listLevels)
-                {
-                    var levelItem = new ViewModel.KPITreeViewModel();
-                    levelItem.key = item.ID;
-                    levelItem.title = item.Name;
-                    levelItem.code = item.Code;
-                    levelItem.state = item.State;
-                    levelItem.levelnumber = item.LevelNumber;
-                    levelItem.parentid = item.ParentID;
-                    levels.Add(levelItem);
-                }
-                var itemLevel = _dbContext.Levels.FirstOrDefault(x => x.ID == user.TeamID);
-                hierarchy = levels.Where(c => c.parentid == itemLevel.ParentID)
-                           .Select(c => new ViewModel.KPITreeViewModel()
-                           {
-                               key = c.key,
-                               title = c.title,
-                               code = c.code,
-                               levelnumber = c.levelnumber,
-                               parentid = c.parentid,
-                               children = GetChildren(levels, c.key)
-                           })
-                           .ToList();
-
-                HieararchyWalk(hierarchy);
-                var obj = new KPITreeViewModel();
-                foreach (var item in hierarchy)
-                {
-                    if (item.key == itemLevel.ID)
-                    {
-                        obj = item;
-                        break;
-                    }
-                }
-                var model = hierarchy.Where(x => x.key == itemLevel.ID).ToList();
-                return model;
-            }
-            else if (permision.Code == "CEN")
-            {
-                listLevels = listLevels.Where(x => x.LevelNumber >= levelNumber.LevelNumber).OrderBy(x => x.LevelNumber).ToList();
-                foreach (var item in listLevels)
-                {
-                    var levelItem = new ViewModel.KPITreeViewModel();
-                    levelItem.key = item.ID;
-                    levelItem.title = item.Name;
-                    levelItem.code = item.Code;
-                    levelItem.state = item.State;
-                    levelItem.levelnumber = item.LevelNumber;
-                    levelItem.parentid = item.ParentID;
-                    levels.Add(levelItem);
-                }
-                var itemLevel = _dbContext.Levels.FirstOrDefault(x => x.ID == user.TeamID);
-                hierarchy = levels.Where(c => c.parentid == itemLevel.ParentID)
-                           .Select(c => new ViewModel.KPITreeViewModel()
-                           {
-                               key = c.key,
-                               title = c.title,
-                               code = c.code,
-                               levelnumber = c.levelnumber,
-                               parentid = c.parentid,
-                               children = GetChildren(levels, c.key)
-                           })
-                           .ToList();
-
-                HieararchyWalk(hierarchy);
-                var obj = new KPITreeViewModel();
-                foreach (var item in hierarchy)
-                {
-                    if (item.key == itemLevel.ID)
-                    {
-                        obj = item;
-                        break;
-                    }
-                }
-                var model = hierarchy.Where(x => x.key == itemLevel.ID).ToList();
-                return model;
-            }
-            else if (permision.Code == "DEP")
-            {
-                listLevels = listLevels.Where(x => x.LevelNumber >= levelNumber.LevelNumber).OrderBy(x => x.LevelNumber).ToList();
-                foreach (var item in listLevels)
-                {
-                    var levelItem = new ViewModel.KPITreeViewModel();
-                    levelItem.key = item.ID;
-                    levelItem.title = item.Name;
-                    levelItem.code = item.Code;
-                    levelItem.state = item.State;
-                    levelItem.levelnumber = item.LevelNumber;
-                    levelItem.parentid = item.ParentID;
-                    levels.Add(levelItem);
-                }
-                var itemLevel = _dbContext.Levels.FirstOrDefault(x => x.ID == user.TeamID);
-                hierarchy = levels.Where(c => c.parentid == itemLevel.ParentID)
-                           .Select(c => new ViewModel.KPITreeViewModel()
-                           {
-                               key = c.key,
-                               title = c.title,
-                               code = c.code,
-                               levelnumber = c.levelnumber,
-                               parentid = c.parentid,
-                               children = GetChildren(levels, c.key)
-                           })
-                           .ToList();
-
-                HieararchyWalk(hierarchy);
-                var obj = new KPITreeViewModel();
-                foreach (var item in hierarchy)
-                {
-                    if (item.key == itemLevel.ID)
-                    {
-                        obj = item;
-                        break;
-                    }
-                }
-                var model = hierarchy.Where(x => x.key == itemLevel.ID).ToList();
-                return model;
-            }
-            else if (permision.Code == "BUI")
-            {
-                listLevels = listLevels.Where(x => x.LevelNumber >= levelNumber.LevelNumber).OrderBy(x => x.LevelNumber).ToList();
-                foreach (var item in listLevels)
-                {
-                    var levelItem = new ViewModel.KPITreeViewModel();
-                    levelItem.key = item.ID;
-                    levelItem.title = item.Name;
-                    levelItem.code = item.Code;
-                    levelItem.state = item.State;
-                    levelItem.levelnumber = item.LevelNumber;
-                    levelItem.parentid = item.ParentID;
-                    levels.Add(levelItem);
-                }
-                var itemLevel = _dbContext.Levels.FirstOrDefault(x => x.ID == user.TeamID);
-                hierarchy = levels.Where(c => c.parentid == itemLevel.ParentID)
-                           .Select(c => new ViewModel.KPITreeViewModel()
-                           {
-                               key = c.key,
-                               title = c.title,
-                               code = c.code,
-                               levelnumber = c.levelnumber,
-                               parentid = c.parentid,
-                               children = GetChildren(levels, c.key)
-                           })
-                           .ToList();
-
-                HieararchyWalk(hierarchy);
-                var obj = new KPITreeViewModel();
-                foreach (var item in hierarchy)
-                {
-                    if (item.key == itemLevel.ID)
-                    {
-                        obj = item;
-                        break;
-                    }
-                }
-                var model = hierarchy.Where(x => x.key == itemLevel.ID).ToList();
-                return model;
-            }
-            else if (permision.Code == "LIN")
-            {
-                listLevels = listLevels.Where(x => x.LevelNumber >= levelNumber.LevelNumber).OrderBy(x => x.LevelNumber).ToList();
-                foreach (var item in listLevels)
-                {
-                    var levelItem = new ViewModel.KPITreeViewModel();
-                    levelItem.key = item.ID;
-                    levelItem.title = item.Name;
-                    levelItem.code = item.Code;
-                    levelItem.state = item.State;
-                    levelItem.levelnumber = item.LevelNumber;
-                    levelItem.parentid = item.ParentID;
-                    levels.Add(levelItem);
-                }
-                var itemLevel = _dbContext.Levels.FirstOrDefault(x => x.ID == user.TeamID);
-                hierarchy = levels.Where(c => c.parentid == itemLevel.ParentID)
-                           .Select(c => new ViewModel.KPITreeViewModel()
-                           {
-                               key = c.key,
-                               title = c.title,
-                               code = c.code,
-                               levelnumber = c.levelnumber,
-                               parentid = c.parentid,
-                               children = GetChildren(levels, c.key)
-                           })
-                           .ToList();
-
-                HieararchyWalk(hierarchy);
-                var obj = new KPITreeViewModel();
-                foreach (var item in hierarchy)
-                {
-                    if(item.key == itemLevel.ID)
-                    {
-                        obj = item;
-                        break;
-                    }
-                }
-                var model = hierarchy.Where(x => x.key == itemLevel.ID).ToList();
-                return model;
-            }
-            else if (permision.Code == "TEA")
-            {
-                listLevels = listLevels.Where(x => x.LevelNumber >= levelNumber.LevelNumber).OrderBy(x => x.LevelNumber).ToList();
-                foreach (var item in listLevels)
-                {
-                    var levelItem = new ViewModel.KPITreeViewModel();
-                    levelItem.key = item.ID;
-                    levelItem.title = item.Name;
-                    levelItem.code = item.Code;
-                    levelItem.state = item.State;
-                    levelItem.levelnumber = item.LevelNumber;
-                    levelItem.parentid = item.ParentID;
-                    levels.Add(levelItem);
-                }
-                var itemLevel = _dbContext.Levels.FirstOrDefault(x => x.ID == user.TeamID);
-                hierarchy = levels.Where(c => c.parentid == itemLevel.ParentID)
-                           .Select(c => new ViewModel.KPITreeViewModel()
-                           {
-                               key = c.key,
-                               title = c.title,
-                               code = c.code,
-                               levelnumber = c.levelnumber,
-                               parentid = c.parentid,
-                               children = GetChildren(levels, c.key)
-                           })
-                           .ToList();
-
-                HieararchyWalk(hierarchy);
-                var obj = new KPITreeViewModel();
-                foreach (var item in hierarchy)
-                {
-                    if (item.key == itemLevel.ID)
-                    {
-                        obj = item;
-                        break;
-                    }
-                }
-                var model = hierarchy.Where(x => x.key == itemLevel.ID).ToList();
-                return model;
-            }
-            else
-            {
-                hierarchy = levels.Where(c => c.parentid == 0)
-                           .Select(c => new ViewModel.KPITreeViewModel()
-                           {
-                               key = c.key,
-                               title = c.title,
-                               code = c.code,
-                               levelnumber = c.levelnumber,
-                               parentid = c.parentid,
-                               children = GetChildren(levels, c.key)
-                           })
-                           .ToList();
-
-
-                HieararchyWalk(hierarchy);
-
-                return hierarchy;
-            }
+            var model = hierarchy.Where(x => x.key == itemLevel.ID).ToList();
+            return model;
 
         }
         public List<ViewModel.KPITreeViewModel> GetListTree()

@@ -23,10 +23,14 @@ namespace KPI.Web.Controllers
         {
             return Json(new KPILevelDAO().ListDatas(kpilevelcode, period), JsonRequestBehavior.AllowGet);
         }
-      
-        public JsonResult GetListTree(int id)
+
+        public JsonResult GetListTreeClient(int id)
         {
-            return Json(new LevelDAO().GetListTree(id), JsonRequestBehavior.AllowGet);
+            return Json(new LevelDAO().GetListTreeClient(id), JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetListTree()
+        {
+            return Json(new LevelDAO().GetListTree(), JsonRequestBehavior.AllowGet);
         }
         public JsonResult LoadData()
         {

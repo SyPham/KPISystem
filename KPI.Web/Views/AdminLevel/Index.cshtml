@@ -63,6 +63,7 @@
                     levelAdminController.loadDetail(data.node.key);
                 },
                 activate: function (event, data) {
+                     $("#statusLine").text(data.node.key+data.node.title);
                 },
                 lazyLoad: function (event, data) {
                     data.result = { url: "/GetListTree", debugDelay: 1000 };
@@ -386,7 +387,7 @@
             <div class="box-header kpi-name">
                 <span class="id" style="display:none"></span>
                 <span class="code" style="display:none"></span>
-
+                <span id="statusLine"></span>
                 <span style="font-size:18px;font-weight:bold">Level</span>
             </div>
             <div class="box-body" id="addKPI">

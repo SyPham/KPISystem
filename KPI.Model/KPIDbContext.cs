@@ -26,10 +26,6 @@ namespace KPI.Model
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Favourite> Favourites { get; set; }
         public DbSet<SeenComment> SeenComments { get; set; }
-        public DbSet<Credential> Credentials { get; set; }
-
-        public DbSet<Role> Roles { get; set; }
-
 
         protected override void OnModelCreating(DbModelBuilder builder)
         {

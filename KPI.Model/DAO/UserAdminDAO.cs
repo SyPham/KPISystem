@@ -22,7 +22,7 @@ namespace KPI.Model.DAO
         {
             entity.Code = entity.Code.ToSafetyString().ToUpper();
             List<EF.KPILevel> kpiLevelList = new List<EF.KPILevel>();
-            
+
             try
             {
                 entity.Password = entity.Password.SHA256Hash();
@@ -46,12 +46,6 @@ namespace KPI.Model.DAO
                     kpiLevelList.Add(kpilevel);
                 }
 
-                var credential = new Credential()
-                {
-                    UserID = entity.ID,
-                    RoleID = entity.Role
-                };
-                _dbContext.Credentials.Add(credential);
                 _dbContext.KPILevels.AddRange(kpiLevelList);
                 _dbContext.SaveChanges();
 
@@ -61,10 +55,6 @@ namespace KPI.Model.DAO
             {
                 return 0;
             }
-        }
-        public object GetListAllRole()
-        {
-            return _dbContext.Roles.ToList();
         }
         public bool Update(EF.User entity)
         {
@@ -91,7 +81,7 @@ namespace KPI.Model.DAO
         public bool LockUser(int id)
         {
             var item = _dbContext.Users.FirstOrDefault(x => x.ID == id);
-            
+
             item.IsActive = !item.IsActive;
             try
             {
@@ -121,11 +111,11 @@ namespace KPI.Model.DAO
                 return false;
             }
         }
-        public bool AddUserToLevel(int id, int teamid)
+        public bool AddUserToLevel(int id, int levelid)
         {
             var itemUser = _dbContext.Users.FirstOrDefault(x => x.ID == id);
             if (itemUser != null)
-                itemUser.TeamID = teamid;
+                itemUser.LevelID = levelid;
 
             try
             {
@@ -143,10 +133,8 @@ namespace KPI.Model.DAO
         public bool Delete(int ID)
         {
             var findUser = _dbContext.Users.FirstOrDefault(x => x.ID == ID);
-            var credential = _dbContext.Credentials.FirstOrDefault(x => x.UserID == findUser.ID);
             try
             {
-                _dbContext.Credentials.Remove(credential);
                 _dbContext.Users.Remove(findUser);
                 _dbContext.SaveChanges();
                 return true;

@@ -125,8 +125,8 @@
 
                 $('#tbluser tr td:nth-child(2) input').change(function () {
                     var id = $(this).parent().parent('td:nth-child(2)').children('div').children('span.level').data('id');
-                    var teamid = Number($('#box .kpi-name .code').text());
-                    if (teamid === 0) {
+                    var levelid = Number($('#box .kpi-name .code').text());
+                    if (levelid === 0) {
                         Swal.fire({
                             title: 'Error!',
                             text: 'Please choose team!',
@@ -135,17 +135,17 @@
                         });
                     }
                     else {
-                         AddUserToLevelController.updateUser(id, teamid);
+                         AddUserToLevelController.updateUser(id, levelid);
                     AddUserToLevelController.loadTree();
                     }
-                   
+
                 });
 
             },
-            updateUser: function (id,teamid) {
+            updateUser: function (id,levelid) {
                 var mObj = {
                     id: id,
-                    teamid: teamid,
+                    levelid: levelid,
                 };
 
                 $.ajax({

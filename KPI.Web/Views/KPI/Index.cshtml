@@ -45,7 +45,7 @@
                 },
                 glyph: glyph_opts,
                 source: {
-                    url: "/KPI/GetListTree/" + $('#user').data('userid'), debugDelay: 100
+                    url: "/KPI/GetListTreeClient/" + $('#user').data('userid'), debugDelay: 100
                 },
                 table: {
                     indentation: 20,
@@ -68,7 +68,7 @@
                     //return false;
                 },
                 lazyLoad: function (event, data) {
-                    data.result = { url: "/GetListTree/"+$('#user').data('userid'), debugDelay: 100 };
+                    data.result = { url: "/GetListTreeClient/"+$('#user').data('userid'), debugDelay: 100 };
                 },
                 renderColumns: function (event, data) {
                     var node = data.node,

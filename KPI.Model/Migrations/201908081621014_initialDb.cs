@@ -3,10 +3,26 @@ namespace KPI.Model.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class addRoleandCredential : DbMigration
+    public partial class initialDb : DbMigration
     {
         public override void Up()
         {
+            DropTable("dbo.Credentials");
+            DropTable("dbo.Roles");
+        }
+        
+        public override void Down()
+        {
+            CreateTable(
+                "dbo.Roles",
+                c => new
+                    {
+                        ID = c.Int(nullable: false, identity: true),
+                        Code = c.String(),
+                        Name = c.String(),
+                    })
+                .PrimaryKey(t => t.ID);
+            
             CreateTable(
                 "dbo.Credentials",
                 c => new
@@ -17,21 +33,6 @@ namespace KPI.Model.Migrations
                     })
                 .PrimaryKey(t => t.ID);
             
-            CreateTable(
-                "dbo.Roles",
-                c => new
-                    {
-                        ID = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
-                    })
-                .PrimaryKey(t => t.ID);
-            
-        }
-        
-        public override void Down()
-        {
-            DropTable("dbo.Roles");
-            DropTable("dbo.Credentials");
         }
     }
 }
