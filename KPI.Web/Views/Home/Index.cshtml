@@ -1,0 +1,128 @@
+﻿@using MvcBreadCrumbs;
+@using KPI.Model.helpers;
+@{
+    ViewBag.Title = "Home";
+}
+@Html.Raw(BreadCrumb.Display())
+@if (@Session["Role"].ToInt() == 1)
+{
+    <div class="row animatedParent" id="home-admin">
+        <a href="@Url.Action("Index","AdminLevel")" class="col-md-3 col-sm-6 col-xs-12 animated bounceInLeft slower  ">
+            <div class="info-box">
+                <span class="info-box-icon bg-aqua"><i class="fa fa-list-ol"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Levels</span>
+                    <span class="info-box-number">@ViewBag.TotalLevel<small></small></span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </a>
+        <!-- /.col -->
+        <a href="@Url.Action("Index","AdminKPI")" class="col-md-3 col-sm-6 col-xs-12 animated bounceInLeft slower ">
+            <div class="info-box">
+                <span class="info-box-icon bg-red"><i class="fa fa-tasks"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">KPIs</span>
+                    <span class="info-box-number">@ViewBag.TotalKPI</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </a>
+        <!-- /.col -->
+        <!-- fix for small devices only -->
+        <div class="clearfix visible-sm-block"></div>
+
+        <a a href="@Url.Action("Index","AdminUser")" class="col-md-3 col-sm-6 col-xs-12 animated bounceInRight slower ">
+            <div class="info-box">
+                <span class="info-box-icon bg-green"><i class="fa fa-user-circle-o"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Users</span>
+                    <span class="info-box-number">@ViewBag.TotalUser</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </a>
+        <!-- /.col -->
+        <a href="@Url.Action("Index","AdminKPILevel")" class="col-md-3 col-sm-6 col-xs-12 animated bounceInRight slower ">
+            <div class="info-box">
+                <span class="info-box-icon bg-yellow"><i class="fa fa-book"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">KPI Level</span>
+                    <span class="info-box-number">@ViewBag.TotalKPILevel</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </a>
+        <!-- /.col -->
+        <!-- /.col -->
+        <a href="@Url.Action("Index","AdminCategory")" class="col-md-3 col-sm-6 col-xs-12 animated bounceInRight slower ">
+            <div class="info-box">
+                <span class="info-box-icon bg-yellow"><i class="fa fa-archive"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Category</span>
+                    <span class="info-box-number">@ViewBag.TotalCategory</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </a>
+        <!-- /.col -->
+    </div>
+}
+else
+{
+<div class="row animatedParent" id="home-client">
+    <a href="@Url.Action("Index","KPI")" class="col-md-3 col-sm-6 col-xs-12 animated bounceInLeft slower  ">
+        <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="fa fa-book"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">KPI</span>
+                @* <span class="info-box-number">@ViewBag.TotalLevel<small></small></span>*@
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </a>
+    <!-- /.col -->
+    <a href="@Url.Action("Index","Favourite")" class="col-md-3 col-sm-6 col-xs-12 animated bounceInLeft slower ">
+        <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="fa fa-heart-o"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Favourite</span>
+                @*<span class="info-box-number">@ViewBag.TotalKPI</span>*@
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </a>
+    <!-- /.col -->
+    <!-- fix for small devices only -->
+    <div class="clearfix visible-sm-block"></div>
+
+    <a a href="@Url.Action("Index","Workplace")" class="col-md-3 col-sm-6 col-xs-12 animated bounceInRight slower ">
+        <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="fa fa-desktop"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Workplace</span>
+                @*<span class="info-box-number">@ViewBag.TotalUser</span>*@
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </a>
+    
+</div>
+}
+
